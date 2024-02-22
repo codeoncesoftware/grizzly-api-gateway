@@ -1,0 +1,305 @@
+<!--
+
+    Copyright © 2020 CodeOnce Software (https://www.codeonce.fr/)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.13.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>fr.codeonce</groupId>
+	<artifactId>grizzly-api-gateway</artifactId>
+	<version>2.2.18</version>
+	<name>grizzly-api-gateway</name>
+
+	<properties>
+		<java.version>11</java.version>
+		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+		<!-- COMMONS -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<!-- Feign -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+
+		<!-- ZUUL API Gateway -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>fr.codeonce</groupId>
+			<artifactId>grizzly-api-common</artifactId>
+			<version>2.2.18</version>
+		</dependency>
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.10.7</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.10.7</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.10.7</version>
+		</dependency>
+
+		<!-- JSON Parse -->
+		<dependency>
+			<groupId>net.minidev</groupId>
+			<artifactId>json-smart</artifactId>
+			<version>1.0.9</version>
+		</dependency>
+		
+		<!-- GSON Parse -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
+		<!-- JSON > XML -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160212</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>4.2</version>
+		</dependency>
+		<!-- Thanks for using https://jar-download.com -->
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			 <artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		 
+				<!-- SWAGGER -->
+				<dependency>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger2</artifactId>
+					<version>2.9.2</version>
+				</dependency>
+		
+				<dependency>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger-ui</artifactId>
+					<version>2.9.2</version>
+				</dependency>
+		
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<classifier>exec</classifier>
+					<release>11</release>
+				</configuration>
+				<executions>
+					<execution>
+						<id>build-info</id>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.10</version>
+				<configuration>
+					<repository>349865163857.dkr.ecr.eu-west-3.amazonaws.com/codeonce-grizzly-api-gateway</repository>
+					<tag>${docker-tag-name}</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}-exec.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.3</version>
+				<configuration>
+					<append>true</append>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.amashchenko.maven.plugin</groupId>
+				<artifactId>gitflow-maven-plugin</artifactId>
+				<version>1.12.0</version>
+				<configuration>
+					<!-- optional configuration -->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>fr.codeonce:grizzly-api-common</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>4.1</version>
+				<configuration>
+					<properties>
+						<owner>CodeOnce Software</owner>
+						<email>https://www.codeonce.fr/</email>
+					</properties>
+					<licenseSets>
+						<licenseSet>
+							<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt
+							</header>
+							<excludes>
+								<exclude>**/README</exclude>
+								<exclude>src/test/resources/**</exclude>
+								<exclude>src/main/resources/**</exclude>
+							</excludes>
+						</licenseSet>
+					</licenseSets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<docker-tag-name>latest</docker-tag-name>
+			</properties>
+		</profile>
+		<profile>
+			<id>common</id>
+			<properties>
+				<docker-tag-name>${project.version}</docker-tag-name>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<docker-tag-name>production</docker-tag-name>
+			</properties>
+		</profile>
+
+	</profiles>
+	<licenses>
+		<license>
+
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<organization>
+		<name>CodeOnce Software</name>
+		<url>https://www.codeonce.fr/</url>
+	</organization>
+	<url>https://www.grizzly-api.com/</url>
+	<inceptionYear>2020</inceptionYear>
+	<developers>
+		<developer>
+			<id>grizzly-api.com</id>
+			<name>Grizzly API Team</name>
+			<organization>CodeOnce Software</organization>
+			<organizationUrl>https://www.codeonce.fr/</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/codeoncesoftware/grizzly-api-gateway/tree/master</url>
+		<connection>scm:git:git://github.com:codeoncesoftware/grizzly-api-gateway.git</connection>
+		<developerConnection>scm:git:ssh://github.com:codeoncesoftware/grizzly-api-gateway.git</developerConnection>
+	</scm>
+</project>

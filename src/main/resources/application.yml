@@ -1,0 +1,55 @@
+zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+  ignore-security-headers: false
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin 
+  ignored-patterns:
+  - /gateway/** 
+  routes:
+    log:
+      sensitiveHeaders:
+      path: /runtime/logs/**
+      service-id: grizzly-api-core
+      stripPrefix: false
+  
+    payment:
+      sensitiveHeaders:
+      path: /payment/**
+      service-id: grizzly-api-payment
+      stripPrefix: false
+    core:
+      sensitiveHeaders:
+      path: /api/**
+      service-id: grizzly-api-core
+      stripPrefix: false
+    runtime:
+      path: /runtime/**
+      service-id: grizzly-api-runtime
+      stripPrefix: false
+    function:
+      path: /function/**
+      service-id: grizzly-api-runtime-function
+      stripPrefix: false
+    
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB 
+#  jackson:
+#    serialization:
+#      FAIL_ON_EMPTY_BEANS: false
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: 8060
+  max-http-header-size: 14800000
+logging:
+  level:
+    fr.codeonce: debug
+    org:
+      springframework:
+        cloud:
+          netflix: INFO
+    com.netflix: INFO
