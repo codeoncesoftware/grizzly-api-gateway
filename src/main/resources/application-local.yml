@@ -1,0 +1,30 @@
+#grizzly-api-core:
+#  ribbon:
+#    ReadTimeout: 150000
+#    ConnectTimeout: 150000
+#    listOfServers: http://localhost:8090
+#
+#grizzly-api-runtime:
+#  ribbon:
+#    ReadTimeout: 150000
+#    ConnectTimeout: 150000
+#    listOfServers: http://localhost:8040
+#
+#grizzly-api-runtime-function:
+#  ribbon:
+#    ReadTimeout: 150000
+#    ConnectTimeout: 150000
+#    listOfServers: http://localhost:8080
+#
+#grizzly-api-payment:
+#  ribbon:
+#    ReadTimeout: 150000
+#    ConnectTimeout: 150000
+#    listOfServers: http://localhost:8030
+#
+#
+#core-url: http://localhost:8090
+#
+#grizzly:
+#  client_id: grizzlyClientId
+#  client_secret: 6062844cc312c4ca
