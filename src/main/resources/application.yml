@@ -1,0 +1,64 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: grizzly-api-core
+          uri: ${GRIZZLY_API_CORE_URI}
+          predicates:
+            - Path=/runtime/logs/**
+        - id: grizzly-api-runtime
+          uri: ${GRIZZLY_API_RUNTIME_URI}
+          predicates:
+            - Path=/runtime/**
+          filters:
+            - name: CustomFilter
+        - id: grizzly-api-core
+          uri: ${GRIZZLY_API_CORE_URI}
+          predicates:
+            - Path=/api/**
+        - id: grizzly-api-runtime-function
+          uri: ${GRIZZLY_API_RUNTIME_FUNCTION_URI}
+          predicates:
+            - Path=/function/**
+        - id: grizzly-api-payment
+          uri: ${GRIZZLY_API_PAYMENT_URI}
+          predicates:
+            - Path=/payment/**
+
+  main:
+    allow-circular-references: true
+
+server:
+  port: 8065
+
+grizzly-api-core:
+  ribbon:
+    ReadTimeout: 150000
+    ConnectTimeout: 150000
+    listOfServers: http://localhost:8090
+
+grizzly-api-runtime:
+  ribbon:
+    ReadTimeout: 150000
+    ConnectTimeout: 150000
+    listOfServers: http://localhost:8040
+
+grizzly-api-runtime-function:
+  ribbon:
+    ReadTimeout: 150000
+    ConnectTimeout: 150000
+    listOfServers: http://localhost:8080
+
+grizzly-api-payment:
+  ribbon:
+    ReadTimeout: 150000
+    ConnectTimeout: 150000
+    listOfServers: http://localhost:8030
+
+
+core-url: http://localhost:8090
+
+grizzly:
+  client_id: grizzlyClientId
+  client_secret: 6062844cc312c4ca
+
